@@ -8,7 +8,7 @@ import { shortGPUName } from '../../utils/gpu';
 interface ModelDetailPanelProps {
   model: NetworkModel;
   onClose: () => void;
-  onCreateKey: (model: NetworkModel, gateway: GatewayOffer) => void;
+  onCreateKey: () => void;
 }
 
 export const ModelDetailPanel: React.FC<ModelDetailPanelProps> = ({
