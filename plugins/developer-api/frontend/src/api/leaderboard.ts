@@ -36,9 +36,12 @@ export interface GPUMetricRow {
   valid_startup_time_count: number;
   valid_e2e_latency_count: number;
   known_sessions: number;
-  success_sessions: number;
+  startup_success_sessions: number;
   excused_sessions: number;
   unexcused_sessions: number;
+  confirmed_swapped_sessions: number;
+  inferred_orchestrator_change_sessions: number;
+  swapped_sessions: number;
   failure_rate: number;
   swap_rate: number;
 }
@@ -51,9 +54,11 @@ export interface SLAComplianceRow {
   gpu_id: string | null;
   region: string | null;
   known_sessions: number;
-  success_sessions: number;
+  startup_success_sessions: number;
   excused_sessions: number;
   unexcused_sessions: number;
+  confirmed_swapped_sessions: number;
+  inferred_orchestrator_change_sessions: number;
   swapped_sessions: number;
   success_ratio: number | null;
   no_swap_ratio: number | null;

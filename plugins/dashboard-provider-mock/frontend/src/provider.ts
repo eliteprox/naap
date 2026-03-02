@@ -66,13 +66,14 @@ function sortedKeys(m: Map<string, unknown[]>): string[] {
 
 /**
  * Weighted average of success_ratio by known_sessions.
- * Sessions with 0 known_sessions don't contribute.
+ * Demand-only rows (served_sessions = 0) are excluded from this KPI.
  * Returns value in [0, 1].
  */
-function weightedSuccessRatio(rows: Array<{ success_ratio: number; known_sessions: number }>): number {
-  const totalSessions = rows.reduce((s, r) => s + r.known_sessions, 0);
+function weightedSuccessRatio(rows: NetworkDemandRow[]): number {
+  const servedRows = rows.filter((r) => r.served_sessions > 0);
+  const totalSessions = servedRows.reduce((s, r) => s + r.known_sessions, 0);
   if (totalSessions === 0) return 1;
-  return rows.reduce((s, r) => s + r.success_ratio * r.known_sessions, 0) / totalSessions;
+  return servedRows.reduce((s, r) => s + r.success_ratio * r.known_sessions, 0) / totalSessions;
 }
 
 /** Count distinct non-empty Ethereum addresses in an array of SLA rows */

@@ -61,7 +61,8 @@ function matchesSLA(row: SLAComplianceRow, pipelineId: string, modelId: string):
 }
 
 function matchesDemand(row: NetworkDemandRow, pipelineId: string, modelId: string): boolean {
-  return row.pipeline === modelId || row.pipeline === pipelineId;
+  const m = row.model_id ?? row.pipeline;
+  return m === modelId || row.pipeline === modelId || (row.pipeline === pipelineId && m === modelId);
 }
 
 /** Aggregate GPU metric rows by gpu_name */

@@ -32,47 +32,71 @@ import { registerMockJobFeedEmitter } from '../job-feed-emitter.js';
 const STUB_DEMAND_1H = [
   // Latest window — success_ratio 1.0, 5 sessions
   { window_start: '2026-02-24T22:00:00Z', gateway: 'gw-a', region: null, pipeline: 'streamdiffusion-sdxl',
+    model_id: null,
     total_sessions: 3, total_streams: 3, avg_output_fps: 7.5, total_inference_minutes: 1.5,
     known_sessions: 3, served_sessions: 3, unserved_sessions: 0, total_demand_sessions: 3,
-    unexcused_sessions: 0, swapped_sessions: 0, missing_capacity_count: 0,
+    unexcused_sessions: 0, confirmed_swapped_sessions: 0, inferred_orchestrator_change_sessions: 0,
+    swapped_sessions: 0, missing_capacity_count: 0,
     success_ratio: 1.0, fee_payment_eth: 0 },
   { window_start: '2026-02-24T22:00:00Z', gateway: 'gw-a', region: null, pipeline: 'streamdiffusion-sdxl-v2v',
+    model_id: null,
     total_sessions: 2, total_streams: 2, avg_output_fps: 7.0, total_inference_minutes: 0.8,
     known_sessions: 2, served_sessions: 2, unserved_sessions: 0, total_demand_sessions: 2,
-    unexcused_sessions: 0, swapped_sessions: 0, missing_capacity_count: 0,
+    unexcused_sessions: 0, confirmed_swapped_sessions: 0, inferred_orchestrator_change_sessions: 0,
+    swapped_sessions: 0, missing_capacity_count: 0,
     success_ratio: 1.0, fee_payment_eth: 0 },
+  // Latest window demand-only row — unmet demand with no serving orchestrator.
+  { window_start: '2026-02-24T22:00:00Z', gateway: 'gw-a', region: null, pipeline: 'streamdiffusion-sdxl',
+    model_id: null,
+    total_sessions: 0, total_streams: 0, avg_output_fps: 0, total_inference_minutes: 0,
+    known_sessions: 2, served_sessions: 0, unserved_sessions: 2, total_demand_sessions: 2,
+    unexcused_sessions: 0, confirmed_swapped_sessions: 0, inferred_orchestrator_change_sessions: 0,
+    swapped_sessions: 0, missing_capacity_count: 2,
+    success_ratio: 0, fee_payment_eth: 0 },
   // Previous window — success_ratio 0.9
   { window_start: '2026-02-24T21:00:00Z', gateway: 'gw-a', region: null, pipeline: 'streamdiffusion-sdxl',
+    model_id: null,
     total_sessions: 4, total_streams: 4, avg_output_fps: 7.2, total_inference_minutes: 2.0,
     known_sessions: 4, served_sessions: 4, unserved_sessions: 0, total_demand_sessions: 4,
-    unexcused_sessions: 0, swapped_sessions: 0, missing_capacity_count: 0,
+    unexcused_sessions: 0, confirmed_swapped_sessions: 0, inferred_orchestrator_change_sessions: 0,
+    swapped_sessions: 0, missing_capacity_count: 0,
     success_ratio: 0.9, fee_payment_eth: 0 },
 ];
 
 /** 24-hour demand window (interval=2h) */
 const STUB_DEMAND_2H = [
   { window_start: '2026-02-24T20:00:00Z', gateway: 'gw-a', region: null, pipeline: 'streamdiffusion-sdxl',
+    model_id: null,
     total_sessions: 10, total_streams: 10, avg_output_fps: 7.5, total_inference_minutes: 5.0,
     known_sessions: 10, served_sessions: 10, unserved_sessions: 0, total_demand_sessions: 10,
-    unexcused_sessions: 0, swapped_sessions: 0, missing_capacity_count: 0,
+    unexcused_sessions: 0, confirmed_swapped_sessions: 0, inferred_orchestrator_change_sessions: 0,
+    swapped_sessions: 0, missing_capacity_count: 0,
     success_ratio: 1.0, fee_payment_eth: 0 },
   { window_start: '2026-02-24T20:00:00Z', gateway: 'gw-a', region: null, pipeline: 'streamdiffusion-sdxl-v2v',
+    model_id: null,
     total_sessions: 7, total_streams: 7, avg_output_fps: 7.0, total_inference_minutes: 8.5,
     known_sessions: 7, served_sessions: 7, unserved_sessions: 0, total_demand_sessions: 7,
-    unexcused_sessions: 0, swapped_sessions: 0, missing_capacity_count: 0,
+    unexcused_sessions: 0, confirmed_swapped_sessions: 0, inferred_orchestrator_change_sessions: 0,
+    swapped_sessions: 0, missing_capacity_count: 0,
     success_ratio: 1.0, fee_payment_eth: 0 },
 ];
 
 /** Two 1-hour SLA windows with distinct orchestrators */
 const STUB_SLA = [
   { window_start: '2026-02-24T22:00:00Z', orchestrator_address: '0xaaa', pipeline: 'streamdiffusion-sdxl',
-    gpu_id: 'GPU-1', known_sessions: 3, success_sessions: 3,
+    gpu_id: 'GPU-1', known_sessions: 3, startup_success_sessions: 3,
+    excused_sessions: 0, unexcused_sessions: 0,
+    confirmed_swapped_sessions: 0, inferred_orchestrator_change_sessions: 0, swapped_sessions: 0,
     success_ratio: 1.0, no_swap_ratio: 1.0, sla_score: 100 },
   { window_start: '2026-02-24T22:00:00Z', orchestrator_address: '0xbbb', pipeline: 'streamdiffusion-sdxl-v2v',
-    gpu_id: 'GPU-2', known_sessions: 2, success_sessions: 2,
+    gpu_id: 'GPU-2', known_sessions: 2, startup_success_sessions: 2,
+    excused_sessions: 0, unexcused_sessions: 0,
+    confirmed_swapped_sessions: 0, inferred_orchestrator_change_sessions: 0, swapped_sessions: 0,
     success_ratio: 1.0, no_swap_ratio: 1.0, sla_score: 100 },
   { window_start: '2026-02-24T21:00:00Z', orchestrator_address: '0xaaa', pipeline: 'streamdiffusion-sdxl',
-    gpu_id: 'GPU-1', known_sessions: 4, success_sessions: 4,
+    gpu_id: 'GPU-1', known_sessions: 4, startup_success_sessions: 4,
+    excused_sessions: 0, unexcused_sessions: 0,
+    confirmed_swapped_sessions: 0, inferred_orchestrator_change_sessions: 0, swapped_sessions: 0,
     success_ratio: 1.0, no_swap_ratio: 1.0, sla_score: 100 },
 ];
 
@@ -81,11 +105,15 @@ const STUB_GPU = [
   { window_start: '2026-02-24T22:00:00Z', orchestrator_address: '0xaaa',
     pipeline: 'streamdiffusion-sdxl', model_id: 'streamdiffusion-sdxl',
     gpu_id: 'GPU-1', region: null, avg_output_fps: 7.5, p95_output_fps: 12.0,
-    known_sessions: 3, success_sessions: 3, failure_rate: 0, swap_rate: 0 },
+    known_sessions: 3, startup_success_sessions: 3, excused_sessions: 0, unexcused_sessions: 0,
+    confirmed_swapped_sessions: 0, inferred_orchestrator_change_sessions: 0, swapped_sessions: 0,
+    failure_rate: 0, swap_rate: 0 },
   { window_start: '2026-02-24T22:00:00Z', orchestrator_address: '0xbbb',
     pipeline: 'streamdiffusion-sdxl-v2v', model_id: 'streamdiffusion-sdxl-v2v',
     gpu_id: 'GPU-2', region: null, avg_output_fps: 7.0, p95_output_fps: 11.0,
-    known_sessions: 2, success_sessions: 2, failure_rate: 0, swap_rate: 0 },
+    known_sessions: 2, startup_success_sessions: 2, excused_sessions: 0, unexcused_sessions: 0,
+    confirmed_swapped_sessions: 0, inferred_orchestrator_change_sessions: 0, swapped_sessions: 0,
+    failure_rate: 0, swap_rate: 0 },
 ];
 
 // ============================================================================

@@ -49,9 +49,12 @@ export interface GPUMetricRow {
   valid_startup_time_count: number;
   valid_e2e_latency_count: number;
   known_sessions: number;
-  success_sessions: number;
+  startup_success_sessions: number;
   excused_sessions: number;
   unexcused_sessions: number;
+  confirmed_swapped_sessions: number;
+  inferred_orchestrator_change_sessions: number;
+  swapped_sessions: number;
   failure_rate: number;
   swap_rate: number;
 }
@@ -64,9 +67,11 @@ export interface SLAComplianceRow {
   gpu_id: string | null;
   region: string | null;
   known_sessions: number;
-  success_sessions: number;
+  startup_success_sessions: number;
   excused_sessions: number;
   unexcused_sessions: number;
+  confirmed_swapped_sessions: number;
+  inferred_orchestrator_change_sessions: number;
   swapped_sessions: number;
   success_ratio: number | null;
   no_swap_ratio: number | null;
@@ -78,6 +83,7 @@ export interface NetworkDemandRow {
   gateway: string;
   region: string | null;
   pipeline: string;
+  model_id: string | null;
   total_sessions: number;
   total_streams: number;
   avg_output_fps: number;
@@ -87,6 +93,8 @@ export interface NetworkDemandRow {
   unserved_sessions: number;
   total_demand_sessions: number;
   unexcused_sessions: number;
+  confirmed_swapped_sessions: number;
+  inferred_orchestrator_change_sessions: number;
   swapped_sessions: number;
   missing_capacity_count: number;
   success_ratio: number;
@@ -116,6 +124,7 @@ export interface NetworkDemandFilters {
   gateway?: string;
   region?: string;
   pipeline?: string;
+  model_id?: string;
 }
 
 // ---------------------------------------------------------------------------
