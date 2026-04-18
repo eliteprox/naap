@@ -65,7 +65,7 @@
   "dependencies": {
     "@inquirer/ansi": "^2.0.3",
     "@inquirer/figures": "^2.0.3",
-    "@inquirer/prompts": "^8.3.0",
+    "@inquirer/prompts": "^8.4.1",
     "@inquirer/type": "^4.0.3",
     "@naap/types": "*",
     "ajv": "^8.12.0",
