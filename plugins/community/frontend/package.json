@@ -10,26 +10,25 @@
   },
   "dependencies": {
     "@naap/plugin-sdk": "*",
-    "@naap/ui": "*",
-    "@naap/types": "*",
     "@naap/theme": "*",
+    "@naap/types": "*",
+    "@naap/ui": "*",
     "@naap/utils": "*",
+    "dompurify": "^3.4.10",
+    "framer-motion": "^12.0.0",
+    "lucide-react": "^0.577.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.0.0",
-    "framer-motion": "^12.0.0",
-    "dompurify": "^3.4.11",
-    "lucide-react": "^0.575.0"
+    "react-router-dom": "^6.30.4"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^6.0.1",
-
-    "autoprefixer": "^10.4.27",
+    "@vitejs/plugin-react": "^6.0.3",
+    "autoprefixer": "^10.5.2",
     "postcss": "^8.5.16",
     "tailwindcss": "^3.4.15",
     "typescript": "~5.9.3",
-    "vite": "8.0.16"
+    "vite": "8.1.4"
   }
 }
