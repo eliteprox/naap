@@ -16,7 +16,7 @@
     "@naap/utils": "*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.0.0",
+    "react-router-dom": "^6.30.5",
     "framer-motion": "^12.0.0",
     "lucide-react": "^0.575.0"
   },
